@@ -1,6 +1,7 @@
 from datetime import date
 
 from starlette.config import Config
+from starlette.datastructures import Secret
 
 config = Config(".env")
 
@@ -15,10 +16,21 @@ version = "1.0.0"
 release_date = "2025-03-18"
 status = "API Status"
 commit_hash = "abc123def456gh789"
-changelog_url ="https://example.com/changelog" # to keep track of the changes in the API/bug fixes
+changelog_url ="https://omolewa.com/changelog" # to keep track of the changes in the API/bug fixes
 server ="FastAPI"
 environment ="production"
 uptime = "72 hours"
-documentation_url ="https://example.com/docs"
+documentation_url ="https://omolewa.com/docs"
 license ="OMOLEWA Licence"
 contact = {"name": "Omolewa Adaramola", "email": "omolewa.davids@gmail.com"}
+
+
+SECRET_KEY = config("SECRET_KEY", cast=Secret)
+ACCESS_TOKEN_EXPIRE_MINUTES = config(
+    "ACCESS_TOKEN_EXPIRE_MINUTES",
+    cast=int,
+    default=7 * 24 * 60  # one week
+)
+JWT_ALGORITHM = config("JWT_ALGORITHM", cast=str, default="HS256")
+JWT_AUDIENCE = config("JWT_AUDIENCE", cast=str, default="ihc:auth")
+JWT_TOKEN_PREFIX = config("JWT_TOKEN_PREFIX", cast=str, default="Bearer")

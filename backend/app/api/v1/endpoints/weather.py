@@ -1,17 +1,30 @@
-from fastapi import APIRouter, Body
+import json
+
+from fastapi import FastAPI, APIRouter, Body, Depends, HTTPException, Path, File, UploadFile
 
 from starlette.status import (
+    HTTP_200_OK,
     HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
+    HTTP_401_UNAUTHORIZED,
+    HTTP_404_NOT_FOUND,
+    HTTP_422_UNPROCESSABLE_ENTITY,
 )
 
-from backend.app.models.user import UserCreate, UserPublic
+from fastapi.security import OAuth2PasswordRequestForm
+
+from backend.app.models.weather import WeatherResponse
 
 router = APIRouter()
 
 
-@router.post("/register", response_model=UserPublic, name="users:register-user", status_code=HTTP_201_CREATED)
-async def register_new_user(
-        new_user: UserCreate = Body(..., embed=True),
-) ->UserPublic:
+@router.get("weather/{city}/", response_model=WeatherResponse, name="users:get-weather-by-city")
+async def get_weather_by_city(
+        city: str, users_repo: UsersRepository = Depends(get_repository(UsersRepository))
+) -> WeatherResponse:
+    info = await weather_repo.get_weather_by_city(cityname=city)
 
-    pass
+    if not info:
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="City not found")
+
+    return info
