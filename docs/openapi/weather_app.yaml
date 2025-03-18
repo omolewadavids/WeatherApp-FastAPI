@@ -1,9 +1,9 @@
 openapi: 3.0.2
 info:
-  title: "IHC API"
+  title: "weather_app API"
   version: "1.0.3"
   description: |
-    OpenAPI schema for IHC
+    OpenAPI schema for weather_app
   x-author: "John Doe"
   x-website: "https://bluelambdatechnologies.com"
   x-contact:
@@ -18,11 +18,11 @@ info:
 
 paths:
 
-  /version:
+  /version-info:
     get:
-      operationId: IHCVersion
-      summary: "get: version of IHC"
-      description: "Returns information about the currently deployed version of the IHC"
+      operationId: weather_appVersion
+      summary: "get: version of weather_app"
+      description: "Returns information about the currently deployed version of the weather_app"
       security:
         - BearerAuth: []
         - ApiKeyAuth: []
@@ -43,12 +43,6 @@ paths:
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
         type: aws_proxy
-      parameters:
-        - name: version
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         200:
           description: "Successful response"
@@ -62,10 +56,16 @@ paths:
               example:
                 values:
                   version: "1.0.0"
-                  git_hash: "abc123"
-                  git_auth: "John Doe"
-                  git_message: "Initial commit"
-                  deploy_date: "2025-02-25"
+                  release_date: "2025-03-18"
+                  status: "Active"
+                  commit_hash: "abc123def456gh789"
+                  changelog_url: "https://example.com/changelog" # to keep track of the changes in the API/bug fixes
+                  server: "FastAPI"
+                  environment: "production"
+                  uptime: "72 hours"
+                  documentation_url: "https://example.com/docs"
+                  license: "OMOLEWA Licence"
+                  contact: "Omolewa Adaramola, omolewa.davids@gmail.com"
             application/xml:
               schema:
                 type: object
@@ -103,17 +103,21 @@ paths:
         "200":
           description: "List of users with pagination"
 
-  /users/register:
+  /weather/city:
     post:
-      operationId: registerUser
+      operationId: weatherRequest
       tags:
-        - "Users"
+        - "Weather"
         - "Public API"
-      summary: "users: register-users"
+      summary: "weather: request-weather"
       description: |
-        Allows a new user to create an account by providing their name, email, and password.  
-        The password should be at least 8 characters long.  
-        Upon successful registration, a confirmation email may be sent.
+        Allows a user to request a weather info about a city.
+      parameters:
+        - name: city
+          in: path
+          required: true
+          schema:
+            type: string
       x-amazon-apigateway-integration:
         responses:
           default:
@@ -134,40 +138,36 @@ paths:
             schema:
               type: object
               properties:
-                first_name:
+                city:
                   type: string
-                  description: "First name of the user."
-                middle_name:
+                  description: "city name."
+                country:
                   type: string
-                  description: "Middle name of the user."
-                last_name:
+                  description: "country name."
+                temperature:
                   type: string
-                  description: "Last name of the user."
-                email:
+                  description: "temperature of the city."
+                humidity:
                   type: string
-                  format: email
-                  description: "A valid email address for account registration."
-                username:
+                  description: "humidity of the city."
+                pressure:
                   type: string
-                  description: "A valid username for account registration."
-                usertype:
+                  description: "pressure of the city."
+                wind_speed:
                   type: string
-                  description: "type of user."
-                password:
+                  description: "wind speed of the city."
+                description:
                   type: string
-                  format: password
-                  description: "A strong password (minimum 8 characters)."
-                accept_condition:
-                  type: boolean
-                  description: "Accept condition."
+                  description: "description of the weather outlook"
+
               required:
-                - first_name
-                - last_name
-                - email
-                - username
-                - usertype
-                - password
-                - accept_condition
+                - city
+                - country
+                - temperature
+                - humidity
+                - pressure
+                - wind_speed
+                - description
       responses:
         "201":
           description: "User registered successfully."
@@ -186,13 +186,13 @@ paths:
                 success_example:
                   summary: "Example Successful Response"
                   value:
-                    first_name: Omolewa
-                    middle_name: Bukola
-                    last_name: Adaramola
-                    email: omolewah@gmail.com
-                    username: omolewah
-                    email_verified: False
-                    usertype: patient
+                    city: london
+                    country: GBR
+                    temperature: 72
+                    humidity: 64
+                    pressure: 734
+                    wind_speed: 20.3
+                    description: "clear sky"
         "400":
           description: "Bad request. Invalid input or missing required fields."
         "409":
@@ -355,12 +355,14 @@ components:
 
 tags:
   - name: "Documentation"
-    description: "information about IHC App"
+    description: "information about weather_app App"
     externalDocs:
-      description: "IHC API Documentation"
+      description: "weather_app API Documentation"
       url: "https://docs.example.com/admin-api"
   - name: "Users"
     description: "Operations related to user accounts"
+  - name: "Weather"
+    description: "Operations related to city weather"
   - name: "Authentication"
     description: "Endpoints: user authentication for login and token management."
     externalDocs:

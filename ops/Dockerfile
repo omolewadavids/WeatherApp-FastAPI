@@ -6,9 +6,9 @@ RUN pip install -r /tmp/private-requirements.txt
 COPY public-requirements.txt /tmp/public-requirements.txt
 RUN pip install -r /tmp/public-requirements.txt
 
-ENV PYTHONPATH $PYTHONPATH:/ihc-install/packages:/ihc-install/dev-packages:/ihc/auth
+ENV PYTHONPATH $PYTHONPATH:/weather_app-install/packages:/weather_app-install/dev-packages:/weather_app/auth
 
-WORKDIR /ihc
+WORKDIR /weather_app
 
 # create a development stage which has dev related packages installed
 FROM base AS devl
@@ -24,11 +24,11 @@ ENTRYPOINT [ "py.test", "tests/functional" ]
 # create a build stage which has a hardcoded copy of the code
 FROM devl AS build
 
-COPY . /ihc
+COPY . /weather_app
 
 # create a deploy stage with only the layers needed for deployment
 FROM base AS deploy
 
-COPY . /ihc
+COPY . /weather_app
 
 CMD [ "datadog_lambda.handler.handler" ]

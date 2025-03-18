@@ -8,7 +8,7 @@ from openapi_spec_validator import validate
 from fastapi import FastAPI, Request
 from starlette.middleware.cors import CORSMiddleware
 
-# from backend.app.api.routes import router as api_router
+from backend.app.api.v1.endpoints import router as api_router
 from backend.app.utils.logging_config import configure_structlog, get_logger
 
 # Initialize structlog
@@ -22,7 +22,7 @@ def custom_openapi():
     Custom OpenAPI
     :return: openapi schema
     """
-    with open("docs/openapi/ihc.yaml", "r") as file:
+    with open("docs/openapi/weather_app.yaml", "r") as file:
         openapi_schema = yaml.safe_load(file)
 
     # Validate the specification
@@ -51,7 +51,7 @@ def get_application():
         allow_headers=["*"],
     )
 
-    # app.include_router(api_router, prefix="/api")
+    app.include_router(api_router, prefix="/api")
 
     # Middleware to log requests and responses
     @app.middleware("http")

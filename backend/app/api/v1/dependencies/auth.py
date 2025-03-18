@@ -3,11 +3,11 @@ from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
-from app.core.config import SECRET_KEY, API_PREFIX
-from app.models.user import UserInDB
-from app.api.dependencies.database import get_repository
-from app.db.repositories.users import UsersRepository
-from app.services import auth_service
+from backend.app.core.config import SECRET_KEY, API_PREFIX
+from backend.app.models.user import UserInDB
+from backend.app.api.v1.dependencies.database import get_repository
+from backend.app.db.repositories.weather import WeatherRepository
+from backend.app.services import auth_service
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{API_PREFIX}/users/login/token/")
 
@@ -15,7 +15,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{API_PREFIX}/users/login/token/"
 async def get_user_from_token(
         *,
         token: str = Depends(oauth2_scheme),
-        user_repo: UsersRepository = Depends(get_repository(UsersRepository)),
+        user_repo: WeatherRepository = Depends(get_repository(WeatherRepository)),
 ) -> Optional[UserInDB]:
 
     try:
@@ -34,12 +34,6 @@ def get_current_active_user(current_user: UserInDB = Depends(get_user_from_token
             detail="No authenticated user.",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    # if not current_user.is_active:
-    #     raise HTTPException(
-    #         status_code=status.HTTP_401_UNAUTHORIZED,
-    #         detail="Not an active user.",
-    #         headers={"WWW-Authenticate": "Bearer"},
-    #     )
 
     return current_user
 

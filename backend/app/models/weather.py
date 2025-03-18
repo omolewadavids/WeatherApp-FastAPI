@@ -2,6 +2,8 @@
 
 from backend.app.models.core import CoreModel
 
+from enum import Enum
+
 
 class WeatherResponse(CoreModel):
     temperature: float
@@ -16,13 +18,26 @@ class WeatherPredictionResponse(CoreModel):
     will_temperature_rise: bool
 
 
-"""
- temperature = weather_data["main"]["temp"]
-        description = weather_data["weather"][0]["description"]
-        humidity = weather_data["main"]["humidity"]
-        city = weather_data["name"]
-        country = weather_data.get("sys", {}).get("country")
-        pressure = weather_data["main"]["pressure"]
-        wind_speed = weather_data["wind"]["speed"]
+class WeatherGetType(str, Enum):
+    geo_loc = "geolocation"
+    city = "city"
 
-"""
+
+class WeatherAppURL(CoreModel):
+    app_url: str
+    request_type: WeatherGetType
+
+
+class WeatherInDB(WeatherResponse):
+    pass
+
+
+class WeatherRequestParams(CoreModel):
+    query: str
+    appid: str
+    units: str
+
+
+class WeatherUnits(str, Enum):
+    metric = "metric"
+    imperial = "imperial"
