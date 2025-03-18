@@ -22,7 +22,7 @@ def custom_openapi():
     Custom OpenAPI
     :return: openapi schema
     """
-    with open("docs/openapi/ihc.yaml", "r") as file:
+    with open("docs/openapi/weather_app.yaml", "r") as file:
         openapi_schema = yaml.safe_load(file)
 
     # Validate the specification

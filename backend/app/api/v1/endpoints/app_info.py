@@ -38,5 +38,5 @@ async def get_current_version() -> VersionInfo:
 
 @router.get("/openapi.yaml", include_in_schema=False)
 def get_openapi_yaml():
-    log.info("IHC Version requested", service="get-current-version")
+    log.info("weather_app Version requested", service="get-current-version")
     return FileResponse("openapi.yaml", media_type="text/yaml")

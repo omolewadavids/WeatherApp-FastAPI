@@ -1,9 +1,9 @@
 openapi: 3.0.2
 info:
-  title: "IHC API"
+  title: "weather_app API"
   version: "1.0.3"
   description: |
-    OpenAPI schema for IHC
+    OpenAPI schema for weather_app
   x-author: "John Doe"
   x-website: "https://bluelambdatechnologies.com"
   x-contact:
@@ -20,9 +20,9 @@ paths:
 
   /version-info:
     get:
-      operationId: IHCVersion
-      summary: "get: version of IHC"
-      description: "Returns information about the currently deployed version of the IHC"
+      operationId: weather_appVersion
+      summary: "get: version of weather_app"
+      description: "Returns information about the currently deployed version of the weather_app"
       security:
         - BearerAuth: []
         - ApiKeyAuth: []
@@ -355,9 +355,9 @@ components:
 
 tags:
   - name: "Documentation"
-    description: "information about IHC App"
+    description: "information about weather_app App"
     externalDocs:
-      description: "IHC API Documentation"
+      description: "weather_app API Documentation"
       url: "https://docs.example.com/admin-api"
   - name: "Users"
     description: "Operations related to user accounts"

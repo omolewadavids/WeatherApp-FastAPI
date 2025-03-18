@@ -34,5 +34,5 @@ ACCESS_TOKEN_EXPIRE_MINUTES = config(
     default=7 * 24 * 60  # one week
 )
 JWT_ALGORITHM = config("JWT_ALGORITHM", cast=str, default="HS256")
-JWT_AUDIENCE = config("JWT_AUDIENCE", cast=str, default="ihc:auth")
+JWT_AUDIENCE = config("JWT_AUDIENCE", cast=str, default="weather_app:auth")
 JWT_TOKEN_PREFIX = config("JWT_TOKEN_PREFIX", cast=str, default="Bearer")

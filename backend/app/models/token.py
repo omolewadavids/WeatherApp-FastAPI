@@ -6,14 +6,14 @@ from backend.app.models.core import CoreModel
 
 
 class JWTMeta(CoreModel):
-    iss: str = "ihc.io"
+    iss: str = "weather_app.io"
     aud: str = JWT_AUDIENCE
     iat: float = datetime.timestamp(datetime.utcnow())
     exp: float = datetime.timestamp(datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
 
 
 class EmailVerificationMeta(CoreModel):
-    iss: str = "ihc.io"
+    iss: str = "weather_app.io"
     aud: str = JWT_AUDIENCE
     iat: float = datetime.timestamp(datetime.utcnow())
     exp: float = datetime.timestamp(datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
