@@ -4,8 +4,8 @@ from typing import Callable, Type
 
 from fastapi import Depends
 
-from backend.app.repositories.db.base import BaseRepository
-from backend.app.models.weather import WeatherAppURL, WeatherGetType
+from backend.app.db.repositories.base import BaseRepository
+from backend.app.models.weather import WeatherAppURL
 
 
 def get_base_url(request_type: str, repo: BaseRepository = Depends(BaseRepository)) -> WeatherAppURL:

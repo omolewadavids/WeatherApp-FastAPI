@@ -26,3 +26,18 @@ class WeatherGetType(str, Enum):
 class WeatherAppURL(CoreModel):
     app_url: str
     request_type: WeatherGetType
+
+
+class WeatherInDB(WeatherResponse):
+    pass
+
+
+class WeatherRequestParams(CoreModel):
+    query: str
+    appid: str
+    units: str
+
+
+class WeatherUnits(str, Enum):
+    metric = "metric"
+    imperial = "imperial"
