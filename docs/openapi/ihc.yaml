@@ -18,7 +18,7 @@ info:
 
 paths:
 
-  /version:
+  /version-info:
     get:
       operationId: IHCVersion
       summary: "get: version of IHC"
@@ -43,12 +43,12 @@ paths:
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
         type: aws_proxy
-      parameters:
-        - name: version
-          in: path
-          required: true
-          schema:
-            type: integer
+#      parameters:
+#        - name: version
+#          in: path
+#          required: true
+#          schema:
+#            type: integer
       responses:
         200:
           description: "Successful response"
@@ -62,10 +62,16 @@ paths:
               example:
                 values:
                   version: "1.0.0"
-                  git_hash: "abc123"
-                  git_auth: "John Doe"
-                  git_message: "Initial commit"
-                  deploy_date: "2025-02-25"
+                  release_date: "2025-03-18"
+                  status: "Active"
+                  commit_hash: "abc123def456gh789"
+                  changelog_url: "https://example.com/changelog" # to keep track of the changes in the API/bug fixes
+                  server: "FastAPI"
+                  environment: "production"
+                  uptime: "72 hours"
+                  documentation_url: "https://example.com/docs"
+                  license: "OMOLEWA Licence"
+                  contact: "Omolewa Adaramola, omolewa.davids@gmail.com"
             application/xml:
               schema:
                 type: object
