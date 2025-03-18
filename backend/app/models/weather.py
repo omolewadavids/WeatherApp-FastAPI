@@ -2,6 +2,8 @@
 
 from backend.app.models.core import CoreModel
 
+from enum import Enum
+
 
 class WeatherResponse(CoreModel):
     temperature: float
@@ -14,3 +16,13 @@ class WeatherResponse(CoreModel):
 
 class WeatherPredictionResponse(CoreModel):
     will_temperature_rise: bool
+
+
+class WeatherGetType(str, Enum):
+    geo_loc = "geolocation"
+    city = "city"
+
+
+class WeatherAppURL(CoreModel):
+    app_url: str
+    request_type: WeatherGetType

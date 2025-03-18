@@ -18,13 +18,14 @@ from backend.app.models.weather import WeatherResponse
 router = APIRouter()
 
 
-@router.get("weather/{city}/", response_model=WeatherResponse, name="users:get-weather-by-city")
+@router.get("/{city}/", response_model=WeatherResponse, name="users:get-weather-by-city")
 async def get_weather_by_city(
-        city: str, users_repo: UsersRepository = Depends(get_repository(UsersRepository))
+        # city: str, users_repo: UsersRepository = Depends(get_repository(UsersRepository))
 ) -> WeatherResponse:
-    info = await weather_repo.get_weather_by_city(cityname=city)
-
-    if not info:
-        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="City not found")
-
-    return info
+    # info = await weather_repo.get_weather_by_city(cityname=city)
+    #
+    # if not info:
+    #     raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="City not found")
+    #
+    # return info
+    pass

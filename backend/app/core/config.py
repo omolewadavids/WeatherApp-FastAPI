@@ -5,6 +5,8 @@ from starlette.datastructures import Secret
 
 config = Config(".env")
 
+CITY_BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
+GEO_BASE_URL = "http://api.openweathermap.org/data/2.5"
 PROJECT_NAME = "Weather-App"
 VERSION = "1.0.0"
 API_PREFIX = "/api"
