@@ -31,4 +31,4 @@ FROM base AS deploy
 
 COPY . /weather_app
 
-CMD [ "datadog_lambda.handler.handler" ]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
