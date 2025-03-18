@@ -1,0 +1,372 @@
+openapi: 3.0.2
+info:
+  title: "IHC API"
+  version: "1.0.3"
+  description: |
+    OpenAPI schema for IHC
+  x-author: "John Doe"
+  x-website: "https://bluelambdatechnologies.com"
+  x-contact:
+    name: "API Support"
+    email: "support@my-api.com"
+  contact:
+    name: "API Support"
+    email: "info@bluelambdatechnologies.com"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+
+paths:
+
+  /version:
+    get:
+      operationId: IHCVersion
+      summary: "get: version of IHC"
+      description: "Returns information about the currently deployed version of the IHC"
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
+        - OAuth2: [read]
+      tags:
+        - "Documentation"  # Add a tag to categorize this endpoint
+        - "Private API"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: 200
+          4xx:
+            statusCode: 400
+          5xx:
+            statusCode: 500
+        uri: ${INVOKE_ARN}
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+        type: aws_proxy
+      parameters:
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "#/components/schema/Version"
+                properties:
+                  version:
+                    type: string
+              example:
+                values:
+                  version: "1.0.0"
+                  git_hash: "abc123"
+                  git_auth: "John Doe"
+                  git_message: "Initial commit"
+                  deploy_date: "2025-02-25"
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /users:
+    get:
+      summary: "get: users list"
+      operationId: getUsers
+      security:
+        - OAuth2: []
+      tags:
+        - "Users"
+        - "Private API"
+      description: |
+        Allow super user to get all admins
+      parameters:
+        - name: page
+          in: query
+          description: "Page number"
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: "Number of items per page"
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: "List of users with pagination"
+
+  /users/register:
+    post:
+      operationId: registerUser
+      tags:
+        - "Users"
+        - "Public API"
+      summary: "users: register-users"
+      description: |
+        Allows a new user to create an account by providing their name, email, and password.  
+        The password should be at least 8 characters long.  
+        Upon successful registration, a confirmation email may be sent.
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: 200
+          4xx:
+            statusCode: 400
+          5xx:
+            statusCode: 500
+        uri: ${INVOKE_ARN}
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+        type: aws_proxy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  description: "First name of the user."
+                middle_name:
+                  type: string
+                  description: "Middle name of the user."
+                last_name:
+                  type: string
+                  description: "Last name of the user."
+                email:
+                  type: string
+                  format: email
+                  description: "A valid email address for account registration."
+                username:
+                  type: string
+                  description: "A valid username for account registration."
+                usertype:
+                  type: string
+                  description: "type of user."
+                password:
+                  type: string
+                  format: password
+                  description: "A strong password (minimum 8 characters)."
+                accept_condition:
+                  type: boolean
+                  description: "Accept condition."
+              required:
+                - first_name
+                - last_name
+                - email
+                - username
+                - usertype
+                - password
+                - accept_condition
+      responses:
+        "201":
+          description: "User registered successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    description: "The unique identifier of the newly registered user."
+                  message:
+                    type: string
+                    description: "Success message."
+              examples:
+                success_example:
+                  summary: "Example Successful Response"
+                  value:
+                    first_name: Omolewa
+                    middle_name: Bukola
+                    last_name: Adaramola
+                    email: omolewah@gmail.com
+                    username: omolewah
+                    email_verified: False
+                    usertype: patient
+        "400":
+          description: "Bad request. Invalid input or missing required fields."
+        "409":
+          description: "Conflict. Email or Username already exists."
+
+  /users/login:
+    post:
+      operationId: loginUser
+      tags:
+        - "Users"
+        - "Authentication"
+        - "Public API"
+      summary: "post: user login"
+      description: |
+        Authenticates a user using email and password.  
+        Returns a JWT token upon successful login, which is used for protected routes.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: "The registered email address of the user."
+                password:
+                  type: string
+                  format: password
+                  description: "The user's password."
+              required:
+                - email
+                - password
+            examples:
+              user_example:
+                summary: "Example Login Request"
+                value:
+                  email: "user@example.com"
+                  password: "securepassword"
+      responses:
+        "200":
+          description: "User authenticated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: "JWT access token for authentication."
+                  token_type:
+                    type: string
+                    enum: [ "Bearer" ]
+                    description: "Indicates the token type."
+              examples:
+                success_example:
+                  summary: "Example Successful Response"
+                  value:
+                    access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI..."
+                    token_type: "Bearer"
+        "400":
+          description: "Bad request. Invalid input format."
+        "401":
+          description: "Unauthorized. Invalid email or password."
+        "500":
+          description: "Internal server error"
+
+  /some-endpoint:
+    get:
+      operationId: rateLimit
+      tags:
+        - "Documentation"
+        - "Authentication"
+      summary: "A rate-limited endpoint"
+      deprecated: true
+      responses:
+        "200":
+          description: "Success"
+          headers:
+            X-Rate-Limit-Limit:
+              description: "The maximum number of requests allowed in the current period"
+              schema:
+                type: integer
+            X-Rate-Limit-Remaining:
+              description: "The number of requests remaining in the current period"
+              schema:
+                type: integer
+            X-Rate-Limit-Reset:
+              description: "The time when the rate limit will reset, in UTC epoch seconds"
+              schema:
+                type: integer
+
+  /openapi.yaml:
+    get:
+      operationId: getOpenAPI
+      tags:
+        - "Documentation"
+        - "Authentication"
+      summary: "Get the OpenAPI schema in YAML format"
+      description: "Retrieve the OpenAPI schema for the API in YAML format."
+      security:
+        - BearerAuth: [ ]
+      responses:
+        "200":
+          description: "Returns the OpenAPI YAML definition"
+          content:
+            text/yaml:
+              schema:
+                type: string
+                example: |
+                  openapi: 3.0.0
+                  info:
+                    title: "My Custom API"
+                    version: "1.0.0"
+                    description: "Custom OpenAPI schema for my project"
+
+components:
+  schemas:
+    Version:
+      type: string
+      properties:
+        price:
+          type: number
+          minimum: 0
+          description: "The price of the product"
+        name:
+          type: string
+          maxLength: 100
+          description: "The name of the product"
+    Product:
+      type: object
+      properties:
+        price:
+          type: number
+          minimum: 0
+          description: "The price of the product"
+        name:
+          type: string
+          maxLength: 100
+          description: "The name of the product"
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: "https://example.com/auth"
+          tokenUrl: "https://example.com/token"
+          scopes:
+            read: "Read access"
+            write: "Write access"
+
+tags:
+  - name: "Documentation"
+    description: "information about IHC App"
+    externalDocs:
+      description: "IHC API Documentation"
+      url: "https://docs.example.com/admin-api"
+  - name: "Users"
+    description: "Operations related to user accounts"
+  - name: "Authentication"
+    description: "Endpoints: user authentication for login and token management."
+    externalDocs:
+      description: "Learn more about Authentication"
+      url: "https://my-api.com/authentication-guide"
+  - name: "Public API"
+    description: "Endpoints that are accessible publicly"
+  - name: "Private API"
+    description: "Endpoints that require authentication"

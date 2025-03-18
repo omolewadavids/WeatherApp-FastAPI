@@ -1,0 +1,4 @@
+aws_requests_auth==0.4.3
+openapi_spec_validator==0.7.1
+PyYAML==6.0.2
+Requests==2.32.3
