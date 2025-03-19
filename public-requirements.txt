@@ -7,3 +7,4 @@ boto3==1.37.15
 email-validator
 numpy
 joblib
+scikit-learn==1.6.1
