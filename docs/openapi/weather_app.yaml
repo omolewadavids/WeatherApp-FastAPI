@@ -5,13 +5,13 @@ info:
   description: |
     OpenAPI schema for weather_app
   x-author: "John Doe"
-  x-website: "https://bluelambdatechnologies.com"
+  x-website: "https://omolewadavids.com"
   x-contact:
     name: "API Support"
     email: "support@my-api.com"
   contact:
     name: "API Support"
-    email: "info@bluelambdatechnologies.com"
+    email: "info@omolewadavids.com"
   license:
     name: "MIT"
     url: "https://opensource.org/licenses/MIT"
@@ -59,11 +59,11 @@ paths:
                   release_date: "2025-03-18"
                   status: "Active"
                   commit_hash: "abc123def456gh789"
-                  changelog_url: "https://example.com/changelog" # to keep track of the changes in the API/bug fixes
+                  changelog_url: "https://omolewadavids.com/changelog" # to keep track of the changes in the API/bug fixes
                   server: "FastAPI"
                   environment: "production"
                   uptime: "72 hours"
-                  documentation_url: "https://example.com/docs"
+                  documentation_url: "https://omolewadavids.com/docs"
                   license: "OMOLEWA Licence"
                   contact: "Omolewa Adaramola, omolewa.davids@gmail.com"
             application/xml:
@@ -261,31 +261,6 @@ paths:
         "500":
           description: "Internal server error"
 
-  /some-endpoint:
-    get:
-      operationId: rateLimit
-      tags:
-        - "Documentation"
-        - "Authentication"
-      summary: "A rate-limited endpoint"
-      deprecated: true
-      responses:
-        "200":
-          description: "Success"
-          headers:
-            X-Rate-Limit-Limit:
-              description: "The maximum number of requests allowed in the current period"
-              schema:
-                type: integer
-            X-Rate-Limit-Remaining:
-              description: "The number of requests remaining in the current period"
-              schema:
-                type: integer
-            X-Rate-Limit-Reset:
-              description: "The time when the rate limit will reset, in UTC epoch seconds"
-              schema:
-                type: integer
-
   /openapi.yaml:
     get:
       operationId: getOpenAPI
@@ -311,29 +286,6 @@ paths:
                     description: "Custom OpenAPI schema for my project"
 
 components:
-  schemas:
-    Version:
-      type: string
-      properties:
-        price:
-          type: number
-          minimum: 0
-          description: "The price of the product"
-        name:
-          type: string
-          maxLength: 100
-          description: "The name of the product"
-    Product:
-      type: object
-      properties:
-        price:
-          type: number
-          minimum: 0
-          description: "The price of the product"
-        name:
-          type: string
-          maxLength: 100
-          description: "The name of the product"
   securitySchemes:
     BearerAuth:
       type: http
@@ -347,8 +299,8 @@ components:
       type: oauth2
       flows:
         authorizationCode:
-          authorizationUrl: "https://example.com/auth"
-          tokenUrl: "https://example.com/token"
+          authorizationUrl: "https://omolewadavids.com/auth"
+          tokenUrl: "https://omolewadavids.com/token"
           scopes:
             read: "Read access"
             write: "Write access"
